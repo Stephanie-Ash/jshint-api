@@ -37,6 +37,7 @@ async function postForm(e) {
     if (response.ok) {
         displayErrors(data);
     } else {
+        displayException(data);
         throw new Error(data.error);
     }
 }
@@ -63,6 +64,7 @@ function displayErrors(data) {
 
 }
 
+
 async function getStatus(e) {
     const queryString = `${API_URL}?api_key=${API_KEY}`;
 
@@ -73,6 +75,7 @@ async function getStatus(e) {
     if (response.ok) {
         displayStatus(data);
     } else {
+        displayException(data);
         throw new Error(data.error);
     }
 }
@@ -82,6 +85,20 @@ function displayStatus(data) {
     let heading = "API Key Status";
     let results = `<div>Your key is valud until</div>`;
     results += `<div class="key-status">${data.expiry}</div>`;
+
+    document.getElementById("resultsModalTitle").innerText = heading;
+    document.getElementById("results-content").innerHTML = results;
+
+    resultsModal.show();
+}
+
+
+function displayException(data) {
+
+    let heading = `An Exception Occurred`;
+    let results = `<div>The API returned status code ${data.status_code}</div>`;
+    results += `<div>Error number: <strong>${data.error_no}</strong></div>`;
+    results += `<div>Error text: <strong>${data.error}</strong></div>`;
 
     document.getElementById("resultsModalTitle").innerText = heading;
     document.getElementById("results-content").innerHTML = results;
